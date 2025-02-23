@@ -12,6 +12,8 @@ const roleRoute = require('./routes/role.route.js');
 const app = express();
 const PORT = 3000;
 
+require('dotenv').config()
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

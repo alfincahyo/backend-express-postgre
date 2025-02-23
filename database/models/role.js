@@ -29,6 +29,8 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Role',
     tableName: 'roles',
     timestamps: true,
+    paranoid: true, // Enable soft delete
+    deletedAt: 'deletedAt', // Custom column name for soft delete
   });
   return Role;
 };
