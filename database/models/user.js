@@ -48,6 +48,19 @@ module.exports = (sequelize, DataTypes) => {
     dateofbirth: DataTypes.DATE,
     gender: DataTypes.STRING,
     address: DataTypes.TEXT,
+    phone: {
+      type: DataTypes.STRING(20),
+      allowNull: true,
+    },
+    image: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
     role_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -57,6 +70,8 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
     tableName: 'users',
     timestamps: true,
+    paranoid: true, // Enable soft delete
+    deletedAt: 'deletedAt', // Custom column name for soft delete
   });
   return User;
 };

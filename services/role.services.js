@@ -5,14 +5,16 @@ const create = async (data) => {
     return await db.Role.create(data).then(role => {
       return {
         success: true,
+        code: 201,
         message: "Role created successfully",
         data: role
       };
     }).catch(err => {
-      return {
+      throw {
         success: false,
-        message: "Error creating role!",
-        data: err.message
+        code: 400,
+        message: err.message,
+        data: err
       };
     });
   } catch (error) {
@@ -23,21 +25,27 @@ const create = async (data) => {
 const get = async (id) => {
   try {
     return await db.Role.findByPk(id).then(role => {
-      return !role ? {
-        success: false,
-        message: "Role not found",
-        data: null
-      } : {
-        success: true,
-        message: "Role fetched successfully",
-        data: role
-      };
+      if(!role){
+        throw {
+          success: false,
+          code: 404,
+          message: "Role not found",
+          data: role
+        }
+      }else{
+        return {
+          success: true,
+          code: 200,
+          message: "Role fetched successfully",
+          data: role
+        }
+      }
     })
       .catch(err => {
-        return { success: false, message: "Kesalahan Server!", data: err };
+        throw err;
       });
   } catch (error) {
-    return { success: false, message: "Role Error. Silahkan Cek Kembali", data: error };
+    throw error;
   }
 };
 
@@ -61,7 +69,7 @@ const getPagination = async (page = 1, pageSize = 10) => {
       }
     };
   } catch (error) {
-    return { success: false, message: "Role Error. Silahkan Cek Kembali", data: error.message, code: 500 };
+    throw { success: false, message: "Role Error. Silahkan Cek Kembali", data: error, code: 500 };
   }
 };
 
@@ -70,7 +78,7 @@ const update = async (id, data) => {
     const role = await db.Role.findByPk(id);
 
     if (role === null) {
-      return { success: false, message: "Role not found", code: 404, data: null };
+      throw { success: false, message: "Role not found", code: 404, data: null };
     }
 
     return await db.Role.update(data, { where: { id } }).then(async (role) => {
@@ -83,10 +91,10 @@ const update = async (id, data) => {
       };
     })
       .catch(err => {
-        return { success: false, message: "Kesalahan Server!", data: err, code: 500 };
+        throw { success: false, message: err.message, data: err, code: 500 };
       });
   } catch (error) {
-    return { success: false, message: "Role Error. Silahkan Cek Kembali", data: error, code: 500 };
+    throw error;
   }
 };
 
@@ -95,17 +103,17 @@ const destroy = async (id) => {
     const role = await db.Role.findByPk(id);
 
     if (role === null) {
-      return { success: false, message: "Role not found", code: 404, data: null };
+      throw { success: false, message: "Role not found", code: 404, data: null };
     }
 
-    return await db.Role.destroy({ where: { id } }).then(async (role) => {
-      return { success: true, message: "Role deleted successfully", code: 200, data: null };
+    return await db.Role.destroy({ where: { id }, returning : true }).then(async (role) => {
+      return { success: true, message: "Role deleted successfully", code: 200, data: role };
     })
       .catch(err => {
-        return { success: false, message: "Kesalahan Server!", data: err, code: 500 };
+        throw { success: false, message: err.message, data: err, code: 500 };
       });
   } catch (error) {
-    return { success: false, message: "Role Error. Silahkan Cek Kembali", data: error, code: 500 };
+    throw error;
   }
 }
 

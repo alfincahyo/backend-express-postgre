@@ -19,7 +19,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 db.sequelize.sync().then(() => {
     console.log('Database connected');
+}).catch((err) => {
+    console.error('Unable to connect to the database:', err);
 });
+
 // Routes will be written here
 app.use('/role', roleRoute);
 app.use('/user', userRoute);
