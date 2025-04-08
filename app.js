@@ -8,6 +8,7 @@ const db = require('./database/models/index');
 // Routes
 const userRoute = require('./routes/user.route.js');
 const roleRoute = require('./routes/role.route.js');
+const authRoute = require('./routes/auth.route.js');
 
 const app = express();
 const PORT = 3000;
@@ -24,6 +25,7 @@ db.sequelize.sync().then(() => {
 });
 
 // Routes will be written here
+app.use('/auth', authRoute);
 app.use('/role', roleRoute);
 app.use('/user', userRoute);
 

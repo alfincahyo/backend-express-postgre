@@ -1,6 +1,6 @@
 // 3rd Party Modules
 const { Router } = require('express');
-
+const authMiddleware = require('../middlewares/auth.middleware');
 // Local Modules
 const roleController = require('../controllers/role.controller');
 
@@ -8,10 +8,10 @@ const roleController = require('../controllers/role.controller');
 const router = Router();
 
 // Requests 
-router.get('/', roleController.getAllRole);
-router.post('/', roleController.createRole);
-router.get('/:id', roleController.getRole);
-router.put('/:id', roleController.updateRole);
-router.delete('/:id', roleController.deleteRole);
+router.get('/', authMiddleware, roleController.getAllRole);
+router.post('/', authMiddleware, roleController.createRole);
+router.get('/:id', authMiddleware, roleController.getRole);
+router.put('/:id', authMiddleware, roleController.updateRole);
+router.delete('/:id', authMiddleware, roleController.deleteRole);
 
 module.exports = router;

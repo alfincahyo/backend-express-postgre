@@ -1,4 +1,5 @@
 const db = require('../database/models/index');
+const { Op, Sequelize } = require('sequelize');
 const jwt = require('../lib/jwt');
 
 const create = async (data) => {
@@ -150,10 +151,47 @@ const destroy = async (id) => {
   }
 }
 
+const findByUsernameOrEmail = async (username) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        [Op.or]: [
+          { username: username },
+          { email: username }
+        ]
+      }
+    })
+
+    if (!user) {
+      throw { success: false, message: "User not found", code: 404, data: null };
+    }
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const findById = async (id) => {
+  try {
+    const user = await db.User.findByPk(id);
+
+    if (!user) {
+      throw { success: false, message: "User not found", code: 404, data: null };
+    }
+
+    return user;
+
+  } catch (error) {
+    throw error;
+  }
+}
 module.exports = {
   create,
   update,
   get,
   getPagination,
-  destroy
+  destroy,
+  findByUsernameOrEmail,
+  findById
 };

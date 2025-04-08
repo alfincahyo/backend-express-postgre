@@ -22,6 +22,22 @@ const login = async (payload) => {
       };  
     }
 
+    const token = await jwt.sign({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      name: user.name,
+    });
+
+    return {
+      success: true,
+      code: 200,
+      message: "Login successful",
+      data: {
+        token: token
+      }
+    };
+    
   } catch (error) {
     throw error;
   }
