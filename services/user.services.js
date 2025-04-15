@@ -180,7 +180,7 @@ const findById = async (id) => {
       throw { success: false, message: "User not found", code: 404, data: null };
     }
 
-    return user;
+    return user.dataValues;
 
   } catch (error) {
     throw error;

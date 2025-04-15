@@ -16,7 +16,6 @@ const login = async (req, res) => {
           username: userData.username,
           email: userData.email,
           name: userData.name,
-          active: userData.is_active,
         });
 
         const response = {
